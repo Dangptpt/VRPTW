@@ -38,8 +38,8 @@ def solve() :
             y[i, k] = solver.IntVar(0, inf, "y[{}, {}]".format(i, k))
 
     '''Constraint 1: t0k = 0'''
-    for k in range(v):
-        solver.Add(t[0, k] == 0)
+    # for k in range(v):
+    #     solver.Add(t[0, k] == 0)
 
     '''Constraint 2: xiik = 0'''
     for i in range(n):
@@ -118,11 +118,15 @@ def solve() :
     if status == pywraplp.Solver.OPTIMAL:
         print("Solution:")
         print("Objective value =", solver.Objective().Value())
-        # for i in range(n + 1):
-        #     for j in range(n + 1):
-        #         for k in range(v):
-        #             print(x[i, j + 1, k].name(), x[i, j + 1, k].solution_value(), end=" ")
-        #         print()
+        for i in range(n + 1):
+            for j in range(n + 1):
+                for k in range(v):
+                    print(x[i, j + 1, k].name(), x[i, j + 1, k].solution_value(), end=" ")
+                print()
+        for i in range(n + 1):
+                for k in range(v):
+                    print((t[i, k].name()), t[i, k].solution_value, end=" ")
+                print()
     else:
         print("The problem does not have an optimal solution.")
 
