@@ -20,17 +20,15 @@ def initTable(A_sub, b, c_sub):
 # Thuật toán đơn hình
 def simplex(table, c):
     itr = 0
-
     while 1:
         # In bảng đơn hình
         print()
         print("Iteration:", itr)
         for row in table:
             for el in row:
-                print(Fraction(str(el)).limit_denominator(100), end = '\t')
+                print(Fraction(str(el)).limit_denominator(100), end='\t')
             print()
         profits = []
-
         # Tính các ước lượng delta k
         for i in range(len(table[0]) - 3):
             profits.append(-c[i] + np.sum(table[:, 1] * table[:, 3 + i]))
@@ -54,12 +52,11 @@ def simplex(table, c):
         k = profits.index(max(profits))
         min_value = 9999999
         r = -1
-
         # Tìm vector Ar để đưa ra cơ sở cũ
         for i in range(len(table)):
             if table[:, 2][i] > 0 and table[:, 3 + k][i] > 0:
                 val = table[:, 2][i] / table[:, 3 + k][i]
-                if val < min_value:
+                if val <= min_value:
                     min_value = val
                     r = i
         # Kiểm tra bài toán không có lời giải
@@ -78,27 +75,47 @@ def simplex(table, c):
         # Dòng mới = Dòng cũ tương ứng - (phần tử quay tương ứng) * (dòng chính)
         for i in range(len(table)):
             if i != r:
-                table[i, 2:len(table[0])] = table[i,2:len(table[0])] - table[i][3 + k] * table[r, 2:len(table[0])]
+                table[i, 2:len(table[0])] = table[i, 2:len(table[0])] - table[i][3 + k] * table[r, 2:len(table[0])]
 
         table[r][0] = k
         table[r][1] = c[k]
         itr += 1
+
+# Đẩy hết vector giả khỏi cơ sở
+def fix_degenerate_basis(table, r, k):
+    pivot = table[r][k]
+    print(pivot)
+    # Dòng chính = Dòng quay / phần tử chính
+    table[r, 2:len(table[0])] = table[r, 2:len(table[0])] / pivot
+
+    # Dòng mới = Dòng cũ tương ứng - (phần tử quay tương ứng) * (dòng chính)
+    for i in range(len(table)):
+        print(i)
+        if i != r:
+            table[i, 2:len(table[0])] = table[i, 2:len(table[0])] - table[i][k] * table[r, 2:len(table[0])]
+    table[r][0] = k-3
+    table[r][1] = 0
 
 def phase1(table, c_sub):
     print("Phase 1:")
     simplex(table, c_sub)
     i = 0
     while i < len(table):
-        if table[i][0] >= (len(table[0]-3-len(table))):
-            if table[i][2] != 0:
+        if int(table[i][0]) >= (len(table[0]) - 3 - len(table)):
+            if int(table[i][2]) != 0:
                 print("khong co nghiem co so chap nhan duoc")
                 exit()
             else:
-                table = np.delete(table, i, axis=0)
+                for j in range(3, len(table[0])):
+                    if abs(table[i][j]) > 1e-5:
+                        r = i
+                        k = j
+                        break
+                fix_degenerate_basis(table, r, k)
                 i -= 1
         i += 1
-
     new_table = table
+
     for i in range(len(table)):
         a = len(new_table[0]) - 1
         new_table = np.delete(new_table, a, axis=1)
@@ -109,29 +126,10 @@ def phase2(table, c):
     print()
     print("Phase 2:")
     for i in range(len(table)):
-        table[i][1] = c[int(table[i][0])]
+        if int(table[i][0]) <= len(table[0]) - 3:
+            table[i][1] = c[int(table[i][0])]
     simplex(table, c)
     return table
-
-def print_solve(table):
-    obj = np.sum(table[:, 1] * table[:, 2])
-    print("Objective = ", Fraction(obj).limit_denominator(100), end='\n\n')
-    result = np.zeros((len(table[0]-3)))
-    for i in range(len(table)):
-        result[int(table[i][0])] = table[i][2]
-    for i in range(len(result)):
-        print("X" + str(i), "=", Fraction(result[i]).limit_denominator(100))
-
-def input():
-    f = open("simplextest1.txt", 'r')
-    nConstraint = int(f.readline())
-    c = [float(ci) for ci in f.readline().split()]
-    A = []
-    for i in range(nConstraint):
-        A.append([float(Aij) for Aij in f.readline().split()])
-    b = [float(bi) for bi in f.readline().split()]
-
-    return np.asarray(A), np.asarray(b), np.asarray(c)
 
 # Thiết lập hàm mục tiêu cho bài toán phase 1:
 def prepare_objective_phase1(A, c):
@@ -141,10 +139,29 @@ def prepare_objective_phase1(A, c):
         c_sub[i] = 1
 
     return A_sub, c_sub
-def main():
-    A, b, c = input()
-    A_sub, c_sub = prepare_objective_phase1(A, c)
 
+def print_solve(table):
+    obj = np.sum(table[:, 1] * table[:, 2])
+    print("Objective = ", Fraction(obj).limit_denominator(100), end='\n\n')
+    result = np.zeros((len(table[0])-3))
+    for i in range(len(table)):
+        result[int(table[i][0])] = table[i][2]
+    for i in range(len(result)):
+        print("X" + str(i), "=", Fraction(result[i]).limit_denominator(100))
+
+def input():
+    f = open("simplextest2.txt", 'r')
+    nConstraint = int(f.readline())
+    c = [float(ci) for ci in f.readline().split()]
+    A = []
+    for i in range(nConstraint):
+        A.append([float(Aij) for Aij in f.readline().split()])
+    b = [float(bi) for bi in f.readline().split()]
+    return np.asarray(A), np.asarray(b), np.asarray(c)
+
+def solveLP(A, b, c):
+    A_sub, c_sub = prepare_objective_phase1(A, c)
+    print(A_sub)
     # Khởi tạo bảng đơn hình
     table = initTable(A_sub, b, c_sub)
 
@@ -154,8 +171,12 @@ def main():
     # Pha 2: Tìm phương án tối ưu
     table = phase2(table, c)
 
-    # In kết quả
     print_solve(table)
+    return table
+
+def main():
+    A, b, c = input()
+    solveLP(A, b, c)
 
 if __name__ == "__main__":
     main()
