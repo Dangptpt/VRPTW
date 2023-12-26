@@ -1,4 +1,4 @@
-import simplex_two_phase as simplex
+from Simplex import simplex_two_phase as simplex
 import numpy as np
 import math
 from fractions import  Fraction
@@ -28,7 +28,7 @@ def init_constraint(table):
 def gomory_cut(table):
      pass
 def input():
-    f = open("simplextest1.txt", 'r')
+    f = open("../Simplex/simplextest1.txt", 'r')
     nConstraint = int(f.readline())
     c = [float(ci) for ci in f.readline().split()]
     A = []
