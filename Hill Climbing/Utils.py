@@ -3,6 +3,7 @@ from Solution import Solution
 from Vehicle import Vehicle
 from Candidate import Candidate
 import math
+import matplotlib.pyplot as plt
 class Utils:
     def __init__(self, test):
         self.test = test
@@ -23,16 +24,35 @@ class Utils:
     def createFirstSolveGreedy(self):
         list_customer = []
         depot = self.rows[0]
-        degree_depot = math.atan2(depot.y, depot.x) * 180.0 / math.pi
-        newDegree = 0
-        for i in range (1, len(self.rows)):
+        degree_depot = math.atan2(depot.y, depot.x)
+        for i in range(1, len(self.rows)):
             customer = self.rows[i]
-            newDegree = math.atan2(customer.y, customer.x) * 180.0 / math.pi
+            newDegree = math.atan2(customer.y, customer.x)
+            d1 = math.sqrt(customer.x**2 + customer.y**2)
             d = depot.distance(customer)
-            w = d*-0.7 + 0.1*customer.due_date + 0,2*(newDegree-degree_depot)/360*d
-            list_customer.append({'weight':w, 'point': customer})
+            r = d1*math.sin(newDegree-degree_depot)/d
+            if (math.fabs(r)-1 <= 1e-7):
+                r = 1
+            alpha = math.asin(r) * 180 / math.pi
+            if customer.x * depot.x + customer.y * depot.y - depot.x ** 2 - depot.y ** 2 > 0:
+                if alpha < 0:
+                    alpha = -(180 + alpha)
+                else:
+                    alpha = 180 - alpha
+            w = alpha + d*0,5
+            list_customer.append({'weight': w, 'point': customer})
 
         list_customer.sort(key=lambda x:x['weight'])
+
+        # x_values, y_values = [], []
+        # for i, customer in enumerate(list_customer):
+        #     w = customer['weight']
+        #     x_values.append(customer['point'].x)
+        #     y_values.append(customer['point'].y)
+        #     plt.scatter(customer['point'].x, customer['point'].y, color='black', marker='o', s=20)
+        #     plt.annotate(f'{w}', (customer['point'].x, customer['point'].y),)
+        # plt.scatter(self.rows[0].x, self.rows[0].y, color='red', marker='^', s=100, label='Depot')
+        # plt.show()
 
         new_route = [depot, depot]
         vehicle = Vehicle(0, new_route, self.capacity)
@@ -53,7 +73,7 @@ class Utils:
                     solution.removeNode(position, vehicle_id)
 
             if len(candidates) != 0:
-                candidates.sort(key = lambda x:x.weight)
+                candidates.sort(key=lambda x : x.weight)
                 chosen_custommer = candidates[0]
                 solution.addNode(customer['point'], chosen_custommer.position, chosen_custommer.vehicle_id)
                 candidates.clear()
@@ -62,5 +82,9 @@ class Utils:
                 new_route = [depot,customer['point'], depot]
                 new_vehicle = Vehicle(len(solution.vehicles), new_route, self.capacity)
                 solution.vehicles.append(new_vehicle)
+
+        if len(solution.vehicles) > self.number_vehicles:
+            print(f'Can\'t create solution by gready method, the vehicle needed is {len(solution.vehicles)} ')
+            return solution
 
         return solution

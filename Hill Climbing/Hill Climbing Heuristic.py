@@ -2,12 +2,14 @@ from Utils import Utils
 import matplotlib.pyplot as plt
 import random
 def main():
-    vrptw = Utils("C206")
+    vrptw = Utils("RC208")
     initial_solution = vrptw.createFirstSolveGreedy()
     iterator = 0
-
     while (iterator < 1000):
-        initial_solution.mutate()
+        initial_solution.move(vrptw.rows[0], vrptw.number_vehicles, vrptw.capacity)
+        initial_solution.exchangeInRoute()
+        initial_solution.relocate()
+        initial_solution.exchangeCross()
         iterator += 1
 
     for id, vehicle in enumerate(initial_solution.vehicles):
@@ -32,5 +34,8 @@ def main():
         plt.plot(x_values, y_values, color=color)
     plt.legend()
     plt.show()
+
+
+
 if __name__ == "__main__" :
     main()
