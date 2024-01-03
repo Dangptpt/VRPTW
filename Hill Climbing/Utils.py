@@ -8,7 +8,7 @@ class Utils:
     def __init__(self, test):
         self.test = test
         data = ""
-        with open('../Data/{}.txt'.format(test)) as file:
+        with open(f'../Instances/Data/{test}'.format(test)) as file:
             data = file.readlines()
         number_vehicles, capacity = [int(i) for i in data[4].split()]
         rows = []
@@ -39,10 +39,10 @@ class Utils:
                     alpha = -(180 + alpha)
                 else:
                     alpha = 180 - alpha
-            w = alpha + d*0,5
+            w = alpha
             list_customer.append({'weight': w, 'point': customer})
 
-        list_customer.sort(key=lambda x:x['weight'])
+        list_customer.sort(key=lambda x : x['weight'])
 
         # x_values, y_values = [], []
         # for i, customer in enumerate(list_customer):

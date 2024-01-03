@@ -161,7 +161,7 @@ def input():
 
 def solveLP(A, b, c):
     A_sub, c_sub = prepare_objective_phase1(A, c)
-    print(A_sub)
+
     # Khởi tạo bảng đơn hình
     table = initTable(A_sub, b, c_sub)
 
@@ -171,7 +171,7 @@ def solveLP(A, b, c):
     # Pha 2: Tìm phương án tối ưu
     table = phase2(table, c)
 
-    print_solve(table)
+    #print_solve(table)
     return table
 
 def main():

@@ -8,25 +8,35 @@ def isInteger(fraction):
     else:
         return False
 
-def init_constraint(table):
-    constraint = []
-    cut = 1
-    for i in range(len(table)):
-        if not isInteger(Fraction(table[i][2]).limit_denominator(100)):
-            cut = 0
-            for j in range(len(table[0])-3):
-                constraint.append(table[i][j+3] - math.floor(table[i][j+3]))
-                b = table[i][2] - math.floor(table[i][2])
-            print("Gomory cut:", end='\n\n')
-            break
+def gomoryCut(A, b, c):
 
-    constraint.append(-1)
-    if cut == 1:
-        print("Tất cả nghiệm đều nguyên")
-        exit()
-    return constraint, b
-def gomory_cut(table):
-     pass
+    table = simplex.solveLP(A, b, c)
+
+    while True:
+        A_new, b_new = [], 0
+        cut = 1
+        for i in range(len(table)):
+            if not isInteger(Fraction(table[i][2]).limit_denominator(100)):
+                cut = 0
+                for j in range(len(table[0]) - 3):
+                    A_new.append(table[i][j + 3] - math.floor(table[i][j + 3]))
+                b_new = table[i][2] - math.floor(table[i][2])
+                print("Gomory cut:", end='\n\n')
+                break
+
+        if cut == 1:
+            print("Tất cả nghiệm đều nguyên")
+            return table
+
+        A_new.append(-1)
+
+        A = np.hstack((A, np.zeros((len(A), 1))))
+        A = np.vstack((A, A_new))
+        b = np.hstack((b, b_new))
+        c = np.hstack((c, [0]))
+
+        table = simplex.solveLP(A, b, c)
+
 def input():
     f = open("../Simplex/simplextest1.txt", 'r')
     nConstraint = int(f.readline())
@@ -39,14 +49,9 @@ def input():
 
 def main():
     A, b, c = input()
-    table = simplex.solveLP(A, b, c)
-    A_new, b_new = init_constraint(table)
-    A = np.hstack((A, np.zeros((len(A), 1))))
-    A = np.vstack((A, A_new))
-    b = np.hstack((b, b_new))
-    c = np.hstack((c, [0]))
-    print (A, b, c)
-    g_table = simplex.solveLP(A, b, c)
+    g_table = gomoryCut(A, b, c)
+    simplex.print_solve(g_table)
+
 
 if __name__ == "__main__":
     main()
