@@ -29,7 +29,7 @@ vector<int> route[100];
 void InOut() {
     #define TASK "test"
     freopen(TASK ".txt", "r", stdin);
-    //freopen(TASK ".out", "w", stdout);
+    freopen(TASK ".out", "w", stdout);
 }
 
 bool check (int customerCandidate, int vehicleCandidate) {
@@ -45,7 +45,7 @@ bool check (int customerCandidate, int vehicleCandidate) {
         int prevCustomer = vehicle[vehicleCandidate][i-1];
         currentTime += d[customer][prevCustomer];
         if (currentTime < readyTime[customer]) currentTime = readyTime[customer];
-        currentTime += timeService[customer]
+        currentTime += timeService[customer];
     }
 
     // Kiểm tra ràng buộc khối lượng
@@ -91,6 +91,7 @@ void Try (int k) {
                         for (int t=1; t<=v; ++t) {
                             route[t].clear();
                             for(auto s : vehicle[t]) route[t].push_back(s);
+                            route[t].push_back(0);
                         }
                     }
                 }   
@@ -125,9 +126,10 @@ void Solve() {
     // Backtrack tìm lời giải
     Try(1);
 
-    cout << ans << '\n';
+    cout << "weight" << ": " << ans << '\n';
 
     for (int i=1; i<=v; ++i) {
+        cout << "Route " << i << ": "; 
         for (auto j : route[i]) cout << j << " ";
         cout << '\n';
     }
