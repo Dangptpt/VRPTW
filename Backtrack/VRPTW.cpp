@@ -22,7 +22,7 @@ const int MAXN = 1 + 1e6;
 const int mod = 1e9 + 7;
 const int inf = 0x3f3f3f3f;
 
-int n, v, c, d[100][100], readyTime[100], dueDate[100], demand[100], currentDistance, ans=inf, visited[100];
+int n, v, c, d[100][100], readyTime[100], dueDate[100], demand[100], currentDistance, ans=inf, visited[100], timeService[100];
 vector<int> vehicle[100];
 vector<int> route[100];
 
@@ -45,6 +45,7 @@ bool check (int customerCandidate, int vehicleCandidate) {
         int prevCustomer = vehicle[vehicleCandidate][i-1];
         currentTime += d[customer][prevCustomer];
         if (currentTime < readyTime[customer]) currentTime = readyTime[customer];
+        currentTime += timeService[customer]
     }
 
     // Kiểm tra ràng buộc khối lượng
@@ -116,6 +117,7 @@ void Solve() {
     for (int i=1; i<=n; ++i) cin >> demand[i];
     for (int i=1; i<=n; ++i) cin >> readyTime[i];
     for (int i=1; i<=n; ++i) cin >> dueDate[i];
+    for (int i=1; i<=n; ++i) cin >> timeService[i];
 
     // Khởi tạo các xe bắt đầu đi từ điểm 0
     for (int i=1; i<=v; ++i) vehicle[i].push_back(0);

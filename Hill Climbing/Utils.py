@@ -39,7 +39,7 @@ class Utils:
                     alpha = -(180 + alpha)
                 else:
                     alpha = 180 - alpha
-            w = alpha
+            w = alpha + 0.5*d
             list_customer.append({'weight': w, 'point': customer})
 
         list_customer.sort(key=lambda x : x['weight'])

@@ -8,7 +8,7 @@ def prepareResult():
         vrptw = Utils(file)
         initial_solution = vrptw.createFirstSolveGreedy()
         iterator = 0
-        while (iterator < 1000):
+        while (iterator < 3000):
             initial_solution.move(vrptw.rows[0], vrptw.number_vehicles, vrptw.capacity)
             initial_solution.exchangeInRoute()
             initial_solution.relocate()
@@ -65,8 +65,8 @@ def show(file):
     plt.show()
 
 def main():
-    #prepareResult()
-    show("C101.txt")
+    prepareResult()
+    #show("C201.txt")
 
 if __name__ == "__main__" :
     main()
