@@ -54,7 +54,7 @@ def simplex(table, c):
         r = -1
         # Tìm vector Ar để đưa ra cơ sở cũ
         for i in range(len(table)):
-            if table[:, 2][i] > 0 and table[:, 3 + k][i] > 0:
+            if table[:, 3 + k][i] > 0:
                 val = table[:, 2][i] / table[:, 3 + k][i]
                 if val <= min_value:
                     min_value = val
@@ -150,7 +150,7 @@ def print_solve(table):
         print("X" + str(i), "=", Fraction(result[i]).limit_denominator(100))
 
 def input():
-    f = open("simplextest2.txt", 'r')
+    f = open("simplextest3.txt", 'r')
     nConstraint = int(f.readline())
     c = [float(ci) for ci in f.readline().split()]
     A = []
@@ -171,7 +171,7 @@ def solveLP(A, b, c):
     # Pha 2: Tìm phương án tối ưu
     table = phase2(table, c)
 
-    #print_solve(table)
+    print_solve(table)
     return table
 
 def main():

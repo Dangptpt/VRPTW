@@ -38,7 +38,7 @@ def gomoryCut(A, b, c):
         table = simplex.solveLP(A, b, c)
 
 def input():
-    f = open("../Simplex/simplextest1.txt", 'r')
+    f = open("test2.txt", 'r')
     nConstraint = int(f.readline())
     c = [float(ci) for ci in f.readline().split()]
     A = []
