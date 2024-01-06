@@ -1,18 +1,21 @@
 from Utils import Utils
 import matplotlib.pyplot as plt
+import numpy as np
 import random
 import os
+import csv
 
 def prepareResult():
     for file in os.listdir("D:\Hust Study\Project\Project 1\Project\VRPTW\Instances\Data"):
         vrptw = Utils(file)
         initial_solution = vrptw.createFirstSolveGreedy()
         iterator = 0
-        while (iterator < 3000):
+        while (iterator < 10000):
             initial_solution.move(vrptw.rows[0], vrptw.number_vehicles, vrptw.capacity)
-            initial_solution.exchangeInRoute()
             initial_solution.relocate()
+            initial_solution.exchangeInRoute()
             initial_solution.exchangeCross()
+
             iterator += 1
 
         with open(f'../Instances/Result/{file}') as txt:
@@ -65,8 +68,39 @@ def show(file):
     plt.show()
 
 def main():
-    prepareResult()
-    #show("C201.txt")
+    #prepareResult()
+    show("C104.txt")
+
+    # header = ['Testcase Name', 'Number of Vehicles', 'Total Distance', 'Optimal Solution']
+    #
+    # file_name = '../Instances/Statistic.csv'
+    #
+    # with open(file_name, mode='w', newline='') as file:
+    #     writer = csv.writer(file)
+    #
+    #     writer.writerow(header)
+    #
+    #     table = []
+    #     for file in os.listdir("D:\Hust Study\Project\Project 1\Project\VRPTW\Instances\Result"):
+    #         row = [file.split('.')[0]]
+    #         with open(f'../Instances/Result/{file}') as txt:
+    #             data = txt.readlines()
+    #             weight = float(data[0].split()[2])
+    #             row.append(len(data))
+    #             row.append(round(weight, 1))
+    #             table.append(row)
+    #     columm = []
+    #     for file in os.listdir("D:\Hust Study\Project\Project 1\Project\VRPTW\Instances\Vrp-Set-Solomon"):
+    #         if file.split('.')[1] == 'sol':
+    #             with open(f'../Instances/Vrp-Set-Solomon/{file}') as txt:
+    #                 data = txt.readlines()
+    #                 optimal_cost = data[-1].split()[1]
+    #                 columm.append(float(optimal_cost))
+    #
+    #     for i in range(len(table)):
+    #         table[i].append(columm[i])
+    #         writer.writerow(table[i])
+
 
 if __name__ == "__main__" :
     main()

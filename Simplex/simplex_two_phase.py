@@ -31,7 +31,7 @@ def simplex(table, c):
         profits = []
         # Tính các ước lượng delta k
         for i in range(len(table[0]) - 3):
-            profits.append(-c[i] + np.sum(table[:, 1] * table[:, 3 + i]))
+            profits.append(np.sum(table[:, 1] * table[:, 3 + i]) - c[i])
 
         print("Delta k: ", end=" ")
         for profit in profits:
@@ -56,7 +56,7 @@ def simplex(table, c):
         for i in range(len(table)):
             if table[:, 3 + k][i] > 0:
                 val = table[:, 2][i] / table[:, 3 + k][i]
-                if val <= min_value:
+                if val < min_value:
                     min_value = val
                     r = i
         # Kiểm tra bài toán không có lời giải
@@ -95,6 +95,7 @@ def fix_degenerate_basis(table, r, k):
             table[i, 2:len(table[0])] = table[i, 2:len(table[0])] - table[i][k] * table[r, 2:len(table[0])]
     table[r][0] = k-3
     table[r][1] = 0
+    print (table)
 
 def phase1(table, c_sub):
     print("Phase 1:")
@@ -150,7 +151,7 @@ def print_solve(table):
         print("X" + str(i), "=", Fraction(result[i]).limit_denominator(100))
 
 def input():
-    f = open("simplextest3.txt", 'r')
+    f = open("simplextest2.txt", 'r')
     nConstraint = int(f.readline())
     c = [float(ci) for ci in f.readline().split()]
     A = []
