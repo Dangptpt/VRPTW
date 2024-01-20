@@ -12,7 +12,7 @@ class Solution:
     def removeNode(self, position, vehicle_id):
         self.vehicles[vehicle_id].nodes.pop(position)
 
-    def getTotalWeight(self) -> int:
+    def getTotalWeight(self):
         total = 0
         for vehicle in self.vehicles:
             total += vehicle.getWeight()

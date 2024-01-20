@@ -1,16 +1,19 @@
 from Utils import Utils
 import matplotlib.pyplot as plt
-import numpy as np
+import time
 import random
 import os
 import csv
 
 def prepareResult():
+
     for file in os.listdir("D:\Hust Study\Project\Project 1\Project\VRPTW\Instances\Data"):
         vrptw = Utils(file)
+        start_time = time.time()
+
         initial_solution = vrptw.createFirstSolveGreedy()
         iterator = 0
-        while (iterator < 10000):
+        while (iterator < 1000):
             initial_solution.move(vrptw.rows[0], vrptw.number_vehicles, vrptw.capacity)
             initial_solution.relocate()
             initial_solution.exchangeInRoute()
@@ -19,7 +22,8 @@ def prepareResult():
             iterator += 1
 
         with open(f'../Instances/Result/{file}') as txt:
-            data = txt.readline()
+            data = txt.readlines()
+
         current_weight = float(data.split()[2])
         if current_weight <= initial_solution.getTotalWeight():
             continue
@@ -27,7 +31,7 @@ def prepareResult():
         f = open(f'../Instances/Result/{file}', 'w')
 
         f.write("Total weight: ")
-        f.write(f'{initial_solution.getTotalWeight()}')
+        f.write(f'{round(initial_solution.getTotalWeight(),1)}')
         f.write('\n')
         for id, vehicle in enumerate(initial_solution.vehicles):
             f.write("Route ")
@@ -37,9 +41,7 @@ def prepareResult():
                 f.write(" ")
             f.write('\n')
 
-
 def show(file):
-    result = ''
     with open(f'../Instances/Result/{file}') as txt:
         result = txt.readlines()
     vrptw = Utils(file)
@@ -69,9 +71,10 @@ def show(file):
 
 def main():
     #prepareResult()
-    show("C104.txt")
 
-    # header = ['Testcase Name', 'Number of Vehicles', 'Total Distance', 'Optimal Solution']
+    show("C101.txt")
+
+    # header = ['Testcase Name', 'Number of Vehicles', 'Total Distance', 'Optimal Solution', 'Execution Time']
     #
     # file_name = '../Instances/Statistic.csv'
     #
@@ -96,9 +99,27 @@ def main():
     #                 data = txt.readlines()
     #                 optimal_cost = data[-1].split()[1]
     #                 columm.append(float(optimal_cost))
+    #     columm2 = []
+    #     for file in os.listdir("D:\Hust Study\Project\Project 1\Project\VRPTW\Instances\Data"):
+    #         vrptw = Utils(file)
+    #         start_time = time.time()
+    #
+    #         initial_solution = vrptw.createFirstSolveGreedy()
+    #         iterator = 0
+    #         while (iterator < 500):
+    #             initial_solution.move(vrptw.rows[0], vrptw.number_vehicles, vrptw.capacity)
+    #             initial_solution.relocate()
+    #             initial_solution.exchangeInRoute()
+    #             initial_solution.exchangeCross()
+    #             iterator += 1
+    #
+    #         end_time = time.time()
+    #         elapsed_time = end_time - start_time
+    #         columm2.append(round(elapsed_time, 2))
     #
     #     for i in range(len(table)):
     #         table[i].append(columm[i])
+    #         table[i].append(columm2[i])
     #         writer.writerow(table[i])
 
 

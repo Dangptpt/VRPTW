@@ -40,9 +40,10 @@ class Utils:
                 else:
                     alpha = 180 - alpha
             if alpha < 0:
-                w = alpha - 0.5 * d - 0.1 * customer.due_date
+                w = alpha - 0.5 * d
             else:
-                w = alpha + 0.5 * d + 0.1 * customer.due_date
+                w = alpha + 0.5 * d
+            #w = alpha
 
             list_customer.append({'weight': w, 'point': customer})
 

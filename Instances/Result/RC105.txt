@@ -1,4 +1,4 @@
-Total weight: 1566.8294229969695
+Total weight: 1562.7
 Route 1: 0 61 81 0 
 Route 2: 0 95 62 67 91 0 
 Route 3: 0 42 44 38 40 43 0 

@@ -101,9 +101,9 @@ void Try (int k) {
                 }
 
                 // Khôi phục thành phố đã xét
+                currentDistance -= d[customerCandidate][vehicle[vehicleCandidate].back()];
                 visited[customerCandidate] = 0;
                 vehicle[vehicleCandidate].pop_back();
-                currentDistance -= d[customerCandidate][vehicle[vehicleCandidate].back()];
             }
         }
     }

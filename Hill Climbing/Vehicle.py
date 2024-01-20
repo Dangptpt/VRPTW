@@ -1,3 +1,4 @@
+import math
 class Vehicle:
     def __init__(self, id, nodes, capacity):
         self.id = id
@@ -25,8 +26,8 @@ class Vehicle:
 
         return True
 
-    def getWeight(self) -> int:
+    def getWeight(self):
         distance = 0
         for i in range(1, len(self.nodes)):
-            distance += self.nodes[i].distance(self.nodes[i - 1])
+            distance += math.floor(self.nodes[i].distance(self.nodes[i - 1])*10) / 10
         return distance
