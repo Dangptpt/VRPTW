@@ -49,11 +49,11 @@ bool check (int customerCandidate, int vehicleCandidate) {
     }
 
     // Kiểm tra ràng buộc khối lượng
-    if (weight + demand[customerCandidate] > c) 
+    if (weight + demand[customerCandidate] > c)
         return 0;
 
     // Kiểm tra ràng buộc thời gian
-    if (currentTime + d[customerCandidate][vehicle[vehicleCandidate].back()] > dueDate[customerCandidate]) 
+    if (currentTime + d[customerCandidate][vehicle[vehicleCandidate].back()] > dueDate[customerCandidate])
         return 0;
 
     // Thỏa mãn tất cả các điều kiện
@@ -72,7 +72,7 @@ void Try (int k) {
 
                 // Lưu tổng quãng đường di chuyển hiện tại
                 currentDistance += d[customerCandidate][vehicle[vehicleCandidate].back()];
-                // Đẩy ứng cử viên thành phố vào vector ứng cử viên xe 
+                // Đẩy ứng cử viên thành phố vào vector ứng cử viên xe
                 vehicle[vehicleCandidate].push_back(customerCandidate);
 
                 // Nếu đã duyệt qua hết thành phố
@@ -94,10 +94,10 @@ void Try (int k) {
                             route[t].push_back(0);
                         }
                     }
-                }   
+                }
                 else {
-                    if (currentDistance < ans) 
-                        Try(k+1); 
+                    if (currentDistance < ans)
+                        Try(k+1);
                 }
 
                 // Khôi phục thành phố đã xét
@@ -114,7 +114,7 @@ void Solve() {
     cin >> n >> v >> c;
     for (int i=0; i<=n; ++i)
         for (int j=0; j<=n; ++j) cin >> d[i][j];
-    
+
     for (int i=1; i<=n; ++i) cin >> demand[i];
     for (int i=1; i<=n; ++i) cin >> readyTime[i];
     for (int i=1; i<=n; ++i) cin >> dueDate[i];
@@ -129,7 +129,7 @@ void Solve() {
     cout << "weight" << ": " << ans << '\n';
 
     for (int i=1; i<=v; ++i) {
-        cout << "Route " << i << ": "; 
+        cout << "Route " << i << ": ";
         for (auto j : route[i]) cout << j << " ";
         cout << '\n';
     }

@@ -42,9 +42,14 @@ def prepareResult():
             f.write('\n')
 
 def show(file):
-    with open(f'../Instances/Result/{file}') as txt:
+    with open(f'../Instances/Result/{file}.txt') as txt:
         result = txt.readlines()
-    vrptw = Utils(file)
+    with open(f'../Instances/Vrp-Set-Solomon/{file}.sol') as txt:
+        opt = txt.readlines()
+    vrptw = Utils(f'{file}.txt')
+    print(result[0])
+    print("Optimal Solution: {}".format(opt[-1].split()[1]))
+    plt.figure(figsize=(11, 7))
 
     routes = []
     for i, line in enumerate(result):
@@ -72,7 +77,7 @@ def show(file):
 def main():
     #prepareResult()
 
-    show("C101.txt")
+    show("C101")
 
     # header = ['Testcase Name', 'Number of Vehicles', 'Total Distance', 'Optimal Solution', 'Execution Time']
     #

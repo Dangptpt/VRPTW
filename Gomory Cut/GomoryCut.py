@@ -21,7 +21,7 @@ def gomoryCut(A, b, c):
                 for j in range(len(table[0]) - 3):
                     A_new.append(table[i][j + 3] - math.floor(table[i][j + 3]))
                 b_new = table[i][2] - math.floor(table[i][2])
-                print("Gomory cut:", end='\n\n')
+                print("Gomory cut: x{}".format(int(table[i][0])), end='\n\n')
                 break
 
         if cut == 1:
@@ -47,10 +47,19 @@ def input():
     b = [float(bi) for bi in f.readline().split()]
     return np.asarray(A), np.asarray(b), np.asarray(c)
 
+def print_solve(table, n):
+    obj = np.sum(table[:, 1] * table[:, 2])
+    print("Objective = ", Fraction(obj).limit_denominator(100), end='\n\n')
+    result = np.zeros((len(table[0]) - 3))
+    for i in range(len(table)):
+        result[int(table[i][0])] = table[i][2]
+    for i in range(n):
+        print("X" + str(i), "=", Fraction(result[i]).limit_denominator(100))
+
 def main():
     A, b, c = input()
     g_table = gomoryCut(A, b, c)
-    simplex.print_solve(g_table)
+    print_solve(g_table, len(c))
 
 
 if __name__ == "__main__":

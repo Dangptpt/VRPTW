@@ -151,7 +151,7 @@ def print_solve(table):
         print("X" + str(i), "=", Fraction(result[i]).limit_denominator(100))
 
 def input():
-    f = open("simplextest2.txt", 'r')
+    f = open("simplextest1.txt", 'r')
     nConstraint = int(f.readline())
     c = [float(ci) for ci in f.readline().split()]
     A = []

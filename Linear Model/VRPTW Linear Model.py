@@ -84,8 +84,8 @@ def solve() :
             y[i, k] = solver.IntVar(0, capacity, "y[{}, {}]".format(i, k))
 
     '''Constraint 1: t0k = 0'''
-    for k in range(v):
-        solver.Add(t[0, k] == 0)
+    # for k in range(v):
+    #     solver.Add(t[0, k] == 0)
 
     '''Constraint 2: xiik = 0'''
     for i in range(1, n+1):
@@ -97,8 +97,8 @@ def solve() :
         solver.Add(sum(x[i, j, k] for j in range(1, n+2) for k in range(v)) == 1)
 
     '''Constraint 4: Sum xijk = 1'''
-    # for j in range(n):
-    #     solver.Add(sum(x[i, j+1, k] for i in range(n+1) for k in range(v)) == 1)
+    for j in range(n):
+        solver.Add(sum(x[i, j+1, k] for i in range(n+1) for k in range(v)) == 1)
 
     '''Constraint 5: Sum x[0, j, k] = 1'''
     for k in range(v):
@@ -114,8 +114,8 @@ def solve() :
             solver.Add(sum(x[i, a, k] for i in range(n+1)) == sum(x[a, j, k] for j in range(1, n+2)))
 
     '''Constraint 8: Sum demand < q'''
-    # for k in range(v):
-    #     solver.Add(sum(demand[i] * x[i, j, k] for i in range(1, n+1) for j in range(1, n+2)) <= capacity)
+    for k in range(v):
+        solver.Add(sum(demand[i] * x[i, j, k] for i in range(1, n+1) for j in range(1, n+2)) <= capacity)
 
     '''Constraint 9: time service '''
     for i in range(0, n+1):
@@ -155,18 +155,18 @@ def solve() :
     if status == pywraplp.Solver.OPTIMAL:
         print("Solution:")
         print("Objective value =", solver.Objective().Value())
-        for i in range(n + 1):
-            for j in range(n + 1):
-                for k in range(v):
-                    print(x[i, j + 1, k].name(), x[i, j + 1, k].solution_value(), end=" ")
-                print()
+        for k in range(v):
+            for i in range(n + 1):
+                for j in range(n + 1):
+                    if x[i, j + 1, k].solution_value() == 1:
+                        print(x[i, j + 1, k].name(), x[i, j + 1, k].solution_value(), end=" ")
+                        print()
+            print ()
     else:
         print("The problem does not have an optimal solution.")
 
-    print("\nAdvanced usage:")
     print(f"Problem solved in {solver.wall_time():d} milliseconds")
     print(f"Problem solved in {solver.iterations():d} iterations")
-    #print(f"Problem solved in {solver.nodes():d} branch-and-bound nodes")
 
     return
 
